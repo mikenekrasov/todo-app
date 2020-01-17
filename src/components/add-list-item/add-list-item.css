@@ -6,6 +6,3 @@
 .add-btn:active, .add-btn:focus {
     outline: none;
 }
-.add-icon {
-    cursor: pointer;
-}
