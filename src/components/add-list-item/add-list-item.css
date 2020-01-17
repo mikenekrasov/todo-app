@@ -1,3 +1,11 @@
+.add-btn {
+    background: transparent;
+    border: none;
+    outline: none;
+}
+.add-btn:active, .add-btn:focus {
+    outline: none;
+}
 .add-icon {
     cursor: pointer;
 }

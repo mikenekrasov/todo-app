@@ -17,8 +17,8 @@ export default class AddListItem extends Component {
     };
 
     handleSubmit = () => {
-        if (this.state.typed.length !== 0 && this.state.typed.length > 3 ) {
-            this.props.removeAlert()
+        if (this.state.typed.length !== 0 && this.state.typed.length >= 3 ) {
+            this.props.removeAlert();
             this.props.onAddItem(this.state.typed);
             this.setState({
                 typed:""
@@ -26,7 +26,7 @@ export default class AddListItem extends Component {
         } else {
             this.setState({
                 typed:""
-            })
+            });
             this.props.showAlert()
         }
     };
@@ -36,15 +36,22 @@ export default class AddListItem extends Component {
             this.handleSubmit();
         }
     };
-    // formatInput = (e) => e.target.value.trim();
+    formatInput = (e) => {
+        this.setState({
+            typed: e.target.value.trim()
+        })
+    };
 
     render() {
         return (
             <div className="add-list-item d-flex align-items-center">
-                <AddIcon className="add-icon"
-                         onClick={ this.handleSubmit }/>
+                <button className="add-btn">
+                    <AddIcon className="add-icon"
+                             onClick={this.handleSubmit}/>
+                </button>
                 <input type="text"
                        className="input-field form-control"
+                       onBlur={this.formatInput}
                        onChange={this.onInputChange}
                        onKeyPress={this.onEnterPressed}
                        value={this.state.typed}
