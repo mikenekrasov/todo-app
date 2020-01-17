@@ -8,9 +8,9 @@ const TodoList = ({ todos, onToggleDone }) => {
         const { id } = item;
         return (
             <TodoListItem
-                key={item.id}
                 {...item}
-                onToggleDone={() => onToggleDone(id)}
+                key={item.id}
+                onToggleDone={onToggleDone(id)}
             />
         );
     });
