@@ -2,6 +2,7 @@
     background: transparent;
     border: none;
     outline: none;
+    padding: 0;
 }
 .add-btn:active, .add-btn:focus {
     outline: none;
