@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {map, memoize} from "lodash";
 
 import Alert from "../alert";
 import AppHeader from "../app-header";
@@ -22,7 +23,6 @@ export default class App extends Component {
     };
 
     AddItem = (text) => {
-
         const newItem = {
             label: text,
             id: this.startId += 1
@@ -36,6 +36,7 @@ export default class App extends Component {
         });
 
     };
+
     DeleteItem = () => {
         this.setState(({todoData}) => {
             const doneItems = todoData.filter((item) => !item.done);
@@ -44,30 +45,27 @@ export default class App extends Component {
             }
         })
     };
-    onToggleDone = (id) => {
-        this.setState(({todoData}) => {
-            const index = todoData.findIndex((el) => el.id === id);
-            const oldItem = todoData[index];
-            const newItem = {
-                ...oldItem, done: !oldItem.done
-            };
 
-            const newArray = [
-                ...todoData.slice(0, index),
-                newItem,
-                ...todoData.slice(index + 1)
-            ];
-
+    onToggleDone = memoize((id) => () => {
+        this.setState((prevState) => {
             return {
-                todoData: newArray
-            }
-        })
-    };
+                ...prevState,
+                todoData: map(prevState.todoData, (newItem) => {
+                    if (newItem.id === id) {
+                        newItem.done = !newItem.done;
+                    }
+                    return newItem;
+                }),
+            };
+        });
+    });
+
     showAlert = () => {
         this.setState({
             showAlert: true
         })
     };
+
     removeAlert = () => {
         this.setState({
             showAlert: false
@@ -75,14 +73,14 @@ export default class App extends Component {
     };
 
     render() {
-        const showAlert = this.state.showAlert;
+        const {showAlert, todoData} = this.state;
         return (
             <div className="container d-flex align-items-center flex-column justify-content-center h-100">
                 <div className="app">
                     {showAlert ? <Alert/> : null}
                     <AppHeader onDeleteItem={this.DeleteItem}/>
                     <TodoList
-                        todos={this.state.todoData}
+                        todos={todoData}
                         onToggleDone={this.onToggleDone}
                     />
                     <AddListItem
